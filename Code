@@ -1,0 +1,93 @@
+package infantBlockchain;
+import java.util.Date;
+
+
+public class InfantBChain {
+
+	
+	
+
+
+
+		public String hash; //will hold our digital signature
+		public String previousHash; //will hold hash of previous block
+		private String data; //our block data will be saved here
+		private long timeStamp; 
+
+		//block constructor . adding the method created below in this 
+		public InfantBChain(String data,String previousHash ) {
+			this.data = data;
+			this.previousHash = previousHash;
+			this.timeStamp = new Date().getTime();
+			this.hash= calculateHash();
+		}
+		
+		//creating a method to calculate hash and applying sha256 helper
+		public String calculateHash() {
+			String calculatedhash = StringUtil.applySha256(
+					previousHash +
+					
+				Long.toString(timeStamp) +
+					data
+					
+					);
+					return calculatedhash;
+		}
+		
+		public static void main(String[]args) {
+			
+			InfantBChain  startBlock = new InfantBChain("Hi im the first block","0");
+			System.out.println("Hash for block 1:"+ startBlock.hash);
+
+
+			InfantBChain  secondBlock = new InfantBChain("Hi im the second block",startBlock.hash);
+			System.out.println("Hash for block 2:"+ secondBlock.hash);
+		
+			InfantBChain  thirdBlock = new InfantBChain("Hi im the 3rd block",secondBlock.hash);
+			System.out.println("Hash for block 3:"+ thirdBlock.hash);
+		
+		
+		}
+	}
+package infantBlockchain;
+import java.security.MessageDigest;
+
+public class StringUtil{
+	
+	public static String applySha256(String input) {
+		
+		try {
+			
+			
+			MessageDigest digest =  MessageDigest.getInstance("Sha256");
+			
+			
+			byte[] hash = digest.digest(input.getBytes("UTF-8"));
+			
+			StringBuffer hexString = new StringBuffer();//this will contain hash as hexadecimal
+			
+			for(int i = 0;i<hash.length;i++) {
+				
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if (hex.length()==1)hexString.append('0');
+			}
+			
+			return hexString.toString();
+		}
+		
+		catch(Exception e) {
+			
+			throw new RuntimeException (e);
+		}
+		
+		
+		
+		
+		
+	}
+	
+	}
+	
+	
+	
+
